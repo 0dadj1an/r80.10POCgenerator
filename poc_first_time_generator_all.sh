@@ -19,13 +19,10 @@ source /opt/CPshrd-R80/tmp/.CPprofile.sh
 
 #variables
 SCRIPTFOLDER="$( cd "$(dirname "$0")" ; pwd -P )"
-FIRSTIMELOCK="$SCRIPTFOLDER/first_time.lock"
 REBOOTLOCK="/etc/.wizard_accepted"
 DONELOCK="$SCRIPTFOLDER/done_lock.lock"
 LOG="$SCRIPTFOLDER/first_timelog.log"
 SCRIPTFULLPATH="$SCRIPTFOLDER/poc_first_time_generator_all.sh"
-IP=1.1.1.1
-A=$(/sbin/ifconfig eth1 2>/dev/null|awk '/inet addr:/ {print $2}'|sed 's/addr://')
 DNS1="8.8.8.8"
 DNS2="8.8.4.4"
 TIMESERVER="europe.pool.ntp.org"
