@@ -6,10 +6,6 @@
 #            settings
 #author     :ivo.hrbacek@ixperta.com a laura
 #version    :0.0001
-#usage      :this script is executed and added to rc.local or if API is used can run forever and wait for interaction
-# if there will be IP config via esx API, set IP of machine to 1.1.1.1 by default
-# if there will be ESX API call, create LOCK file!!!!!! : /home/admin/first_time.lock
-# othervise just run from cmd, it will add it automatically to /etc/rc.d/init.d/cpboot or /etc/rc.local
 #==============================================================================
 # CP enviroment variables for cron see sk77300, sk90441
 source /opt/CPshrd-R80/tmp/.CPprofile.sh
