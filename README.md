@@ -16,7 +16,7 @@ It has been tested on Gaia OS only.
 
 1. Copy both scripts to gateway and chmod +x on them
 
-2. Script reboot.sh is help script to reboot server when first time wizard finish. Run it in sepparate ssh session in backgroud first:
+2. Script reboot.sh is help script to reboot server when first time wizard finish. Run it in sepparate ssh session in backgroud first -->
 ./reboot.sh &
 
 3. in second ssh session run ./poc_first_time_generator_all.sh and follw instruction
