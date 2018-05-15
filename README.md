@@ -11,10 +11,11 @@ It has been tested on Gaia OS only.
 
 1. Copy both scripts to gateway and chmod +x on them
 
-2. Script reboot.sh is help script to reboot server when first time wizard finish. Run it in sepparate ssh session in backgroud first --> ./reboot.sh &
+2. Script reboot.sh is help script to reboot server when first time wizard finish (config_system disconnect session and I dont wont to run it in nohup). Run it in sepparate ssh session in backgroud first --> ./reboot.sh &
 
 3. in second ssh session run ./poc_first_time_generator_all.sh and follw instruction
 
+script will finish first time wizard and set settings - blade activation (FW/AV/ABOT/APP/TE/IPS) + Smart Event and Correlation Unit + IPS update + new POC TP profile with settings according to POC guide
 
 scripts will generate following log and lock files:
 
