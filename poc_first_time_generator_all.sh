@@ -205,14 +205,13 @@ if grep -Fxq "$SCRIPTFULLPATH" /etc/rc.local
    then
     # path string find in rc.local..
     printf "path to script already in /etc/rc.local..\n" >>$LOG
-    cat /etc/rc.local >> $LOG
+    
 
    else
     # not found, add it..
     echo $SCRIPTFULLPATH >> /etc/rc.local
     printf "See rc.local, script path added..\n" >> $LOG
-    cat /etc/rc.local >> $LOG
-    printf ""
+    
     
 fi
 
@@ -278,8 +277,7 @@ echo "fw_tap_enable=1" >> $FWDIR/modules/fwkern.conf
 
 
 #run basic first time wizard
-/bin/config_system -s 'install_security_managment=true&install_mgmt_primary=true&install_mgmt_secondary=false&install_security_gw=true&mgmt_gui_clients_radio=any&mgmt_admin_name=admin&mgmt_admin_passwd=checkpoint123&hostname=checkpointPOC&ntp_primary=europe.pool.ntp.org&primary=8.8.8.8&download_info=true&timezone=Europe/Vienna'; shutdown -r now
-
+/bin/bash -c "/bin/config_system -s 'install_security_managment=true&install_mgmt_primary=true&install_mgmt_secondary=false&install_security_gw=true&mgmt_gui_clients_radio=any&mgmt_admin_name=admin&mgmt_admin_passwd=checkpoint123&hostname=checkpointPOC&ntp_primary=europe.pool.ntp.org&primary=8.8.8.8&download_info=true&timezone=Europe/Vienna'; shutdown -r now"
 }
 
 
@@ -438,6 +436,8 @@ main_check(){
         printf "first time wizard and settings done, not needed to run\n" >>$LOG 
                 exit 1
         fi
+
+       
 
   done
 }
