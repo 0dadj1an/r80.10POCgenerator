@@ -366,7 +366,7 @@ mgmt_cli -r true set generic-object uid $d avSettings.inspectIncomingFilesInterf
 mgmt_cli -r true set generic-object uid $d teSettings.fileTypeProcess "ALL_SUPPORTED" 
 mgmt_cli -r true set generic-object uid $d avSettings.fileTypeProcess "ALL_FILE_TYPES" 
 
-
+### je potreba dodelait fail mode na APP and URL + TE + DNS trap!!!!!!!!!! + publish
 
 printf "Policy install..\n" >>$LOG
 mgmt_cli install-policy policy-package "Standard" access true threat-prevention false targets.1 "checkpointPOC" --format json -s /home/admin/id.txt  2>>$LOG
@@ -374,7 +374,7 @@ mgmt_cli install-policy policy-package "Standard" access true threat-prevention 
 mgmt_cli install-policy policy-package "Standard" access false threat-prevention true targets.1 "checkpointPOC" --format json -s /home/admin/id.txt  2>>$LOG
 #sleep 10
 
-### je potreba dodelait fail mode na APP and URL + TE + DNS trap!!!!!!!!!!
+
 
 #check status of publish..
 if [[ "$c" -eq 1 ]] || [[ "$b" -eq 1 ]] ;
