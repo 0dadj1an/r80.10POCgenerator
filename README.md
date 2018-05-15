@@ -13,12 +13,13 @@ It has been tested on Gaia OS only.
 
 
 
-1. Copy both script to gateway and chmod +x on that
+1. Copy script to gateway and chmod +x on that
 
 
-2. run ./poc_first_time_generator_all.sh and follw instruction
+2. run ./poc_first_time_generator_all.sh and follow instructions
 
 
+script will finish first time wizard and set settings - blade activation (FW/AV/ABOT/APP/TE/IPS) + Smart Event and Correlation Unit + IPS update + new POC TP profile with settings according to POC guide
 
 script will generate following log and lock files:
 
