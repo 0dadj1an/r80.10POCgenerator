@@ -20,7 +20,7 @@ source /opt/CPshrd-R80/tmp/.CPprofile.sh
 #variables
 SCRIPTFOLDER="$( cd "$(dirname "$0")" ; pwd -P )"
 FIRSTIMELOCK="$SCRIPTFOLDER/first_time.lock"
-REBOOTLOCK="$SCRIPTFOLDER/reboot_lock.lock"
+REBOOTLOCK="/etc/.wizard_accepted"
 DONELOCK="$SCRIPTFOLDER/done_lock.lock"
 LOG="$SCRIPTFOLDER/first_timelog.log"
 SCRIPTFULLPATH="$SCRIPTFOLDER/poc_first_time_generator_all.sh"
@@ -210,7 +210,7 @@ if grep -Fxq "$SCRIPTFULLPATH" /etc/rc.local
    else
     # not found, add it..
     echo $SCRIPTFULLPATH >> /etc/rc.local
-    printf "See rc.local file below..\n" >> $LOG
+    printf "See rc.local, script path added..\n" >> $LOG
     cat /etc/rc.local >> $LOG
     printf ""
     
@@ -278,9 +278,7 @@ echo "fw_tap_enable=1" >> $FWDIR/modules/fwkern.conf
 
 
 #run basic first time wizard
-/bin/config_system -s 'install_security_managment=true&install_mgmt_primary=true&install_mgmt_secondary=false&install_security_gw=true&mgmt_gui_clients_radio=any&mgmt_admin_name=admin&mgmt_admin_passwd=checkpoint123&hostname=checkpointPOC&ntp_primary=europe.pool.ntp.org&primary=8.8.8.8&download_info=true&timezone=Europe/Vienna' 
-
-echo "rebootfile created after first_time wizard\n" > $REBOOTLOCK
+/bin/config_system -s 'install_security_managment=true&install_mgmt_primary=true&install_mgmt_secondary=false&install_security_gw=true&mgmt_gui_clients_radio=any&mgmt_admin_name=admin&mgmt_admin_passwd=checkpoint123&hostname=checkpointPOC&ntp_primary=europe.pool.ntp.org&primary=8.8.8.8&download_info=true&timezone=Europe/Vienna'; shutdown -r now
 
 }
 
@@ -303,7 +301,7 @@ mgmt_cli set simple-gateway name "checkpointPOC" firewall true application-contr
 mgmt_cli set access-layer name "Network" applications-and-url-filtering true data-awareness true detect-using-x-forward-for true --format json ignore-warnings true -s /home/admin/id.txt 2>>$LOG
 
 printf "Publish..\n" >>$LOG
-mgmt_cli publish -s /home/admin/id.txt >>$LOG 2>>$LOG
+mgmt_cli publish -s /home/admin/id.txt 2>>$LOG
 c=$?
 
 mgmt_cli add access-rule layer "Network" position 1 name "Rule 1" action "Accept" track-settings.type "Detailed Log" track-settings.accounting "True" track-settings.per-connection "True" track-settings.per-session "True"  --format json ignore-warnings true -s /home/admin/id.txt 2>>$LOG
@@ -318,16 +316,15 @@ mgmt_cli run-ips-update -s /home/admin/id.txt 2>>$LOG
 
 # not needed, already done for Optimized profile in method checkpoint_default_modify()
 printf "TP policy and rules..\n" >>$LOG
-mgmt_cli add threat-profile name "POC" active-protections-performance-impact "High" active-protections-severity "Low or above" confidence-level-high "Detect" confidence-level-low "Detect" confidence-level-medium "Detect" threat-emulation true anti-virus true anti-bot true ips true ips-settings.newly-updated-protections "active" --format json ignore-warnings true -s /home/admin/id.txt >>$LOG 2>>$LOG
-mgmt_cli set threat-rule rule-number 1 layer "Standard Threat Prevention" comments "commnet for the first rule" protected-scope "Any" action "POC" install-on "Policy Targets" --format json -s /home/admin/id.txt >>$LOG 2>>$LOG
+mgmt_cli add threat-profile name "POC" active-protections-performance-impact "High" active-protections-severity "Low or above" confidence-level-high "Detect" confidence-level-low "Detect" confidence-level-medium "Detect" threat-emulation true anti-virus true anti-bot true ips true ips-settings.newly-updated-protections "active" --format json ignore-warnings true -s /home/admin/id.txt 2>>$LOG
+mgmt_cli set threat-rule rule-number 1 layer "Standard Threat Prevention" comments "commnet for the first rule" protected-scope "Any" action "POC" install-on "Policy Targets" --format json -s /home/admin/id.txt 2>>$LOG
 
 
 printf "Aditional blade settings..\n" >>$LOG
 # aditional settings
 # get CP object UID in a variable
 
-printf "Get UID of POC GW..\n" >>$LOG
-a=$(mgmt_cli -r true show simple-gateway name checkpointPOC | grep "uid" | head -1  | awk -F':' '{ gsub(" ", "", $0 ); print $2 }') 2>>$LOG
+a=$(mgmt_cli -r true show simple-gateway name checkpointPOC | grep "uid" | head -1  | awk -F':' '{ gsub(" ", "", $0 ); print $2 }') 
 
 # other possible way ho to do that
 #mgmt_cli set generic-object uid $(mgmt_cli -r true show simple-gateway name checkpointPOC | grep "uid" | head -1  | awk -F':' '{ gsub(" ", "", $0 ); print $2 }') enableRtmTrafficReportPerConnection true --format json ignore-warnings true -s /home/admin/id.txt >>$LOG 2>>$LOG
@@ -380,9 +377,9 @@ mgmt_cli -r true set generic-object uid $d avSettings.fileTypeProcess "ALL_FILE_
 
 
 printf "Policy install..\n" >>$LOG
-mgmt_cli install-policy policy-package "Standard" access true threat-prevention false targets.1 "checkpointPOC" --format json -s /home/admin/id.txt >>$LOG 2>>$LOG
+mgmt_cli install-policy policy-package "Standard" access true threat-prevention false targets.1 "checkpointPOC" --format json -s /home/admin/id.txt  2>>$LOG
 #sleep 10
-mgmt_cli install-policy policy-package "Standard" access false threat-prevention true targets.1 "checkpointPOC" --format json -s /home/admin/id.txt >>$LOG 2>>$LOG
+mgmt_cli install-policy policy-package "Standard" access false threat-prevention true targets.1 "checkpointPOC" --format json -s /home/admin/id.txt  2>>$LOG
 #sleep 10
 
 #check status of publish..
