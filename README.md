@@ -27,14 +27,23 @@ scripts will generate following log and lock files:
 
 
 cmd.txt - tenplate for OS config  
+
 done_lock.lock - done lock notifying that first time and settings were finished successfully
+
 reboot_lock.lock - reboot lock notifying that first time was finished successfully
+
 first_timelog.log - main log file
+
 id.txt - session id for API
+
 mgmt.txt - name of mgmt interface 
+
 mgmtip.txt - ip of mgmt interface
+
 mgmtmask.txt - mask of mgmt interface
+
 monitor.txt - name of monitor interface
+
 os.log - OS log
 
 
