@@ -381,6 +381,8 @@ mgmt_cli install-policy policy-package "Standard" access true threat-prevention 
 mgmt_cli install-policy policy-package "Standard" access false threat-prevention true targets.1 "checkpointPOC" --format json -s /home/admin/id.txt  2>>$LOG
 #sleep 10
 
+### je potreba dodelait fail mode na APP and URL + TE + DNS trap!!!!!!!!!!
+
 #check status of publish..
 if [[ "$c" -eq 1 ]] || [[ "$b" -eq 1 ]] ;
  then
