@@ -5,9 +5,14 @@ poc_first_time_generator_all.sh
 
 reboot.sh
 
+
+
+
 These scripts can help you to configure Check Point R80.10 all in one POC server
 
 It has been tested on Gaia OS only.
+
+
 
 1. Copy both scripts to gateway and chmod +x on them
 
