@@ -410,14 +410,9 @@ main_check(){
  # loop checking lock files to make appropriate configs
   do
 	
-        #existuje FIRSTIMELOCK a zaroven neexistuje REBOOTLOCK
-        if [[ -f "$FIRSTIMELOCK" ]] && [[ ! -f "$REBOOTLOCK" ]];
-                then	
-                continue
-        fi
 
         #neexistuje FIRSTIMELOCK a neexistuje REBOOTLOCK a neexistuje DONELOCK
-        if [[ ! -f "$FIRSTIMELOCK" ]] && [[ ! -f "$REBOOTLOCK" ]] && [[ ! -f "$DONELOCK" ]];
+        if [[ ! -f "$REBOOTLOCK" ]] && [[ ! -f "$DONELOCK" ]];
                 then
 				# call OS config
                 load_parameters
@@ -428,7 +423,7 @@ main_check(){
         fi
 
         #existuje REBOOTLOCK a zaroven neexistuje FIRSTTIME
-        if [[ -f "$REBOOTLOCK" ]] && [[ ! -f "$FIRSTIMELOCK" ]];
+        if [[ -f "$REBOOTLOCK" ]] ;
                 then
                 set_settings
         fi
