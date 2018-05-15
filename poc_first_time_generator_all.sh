@@ -296,7 +296,7 @@ printf "Publish..\n" >>$LOG
 mgmt_cli publish -s /home/admin/id.txt 2>>$LOG
 c=$?
 
-mgmt_cli add access-rule layer "Network" position 1 name "Rule 1" action "Accept" track-settings.type "Detailed Log" track-settings.accounting "True" track-settings.per-connection "True" track-settings.per-session "True"  --format json ignore-warnings true -s /home/admin/id.txt 2>>$LOG
+mgmt_cli add access-rule layer "Network" position 1 name "Rule 1" action "Accept" track-settings.type "Extended Log" track-settings.accounting "True" track-settings.per-connection "True" track-settings.per-session "True"  --format json ignore-warnings true -s /home/admin/id.txt 2>>$LOG
 
 mgmt_cli set access-rule name "Cleanup rule" layer "Network" enabled "False"  --format json ignore-warnings true -s /home/admin/id.txt 2>>$LOG
 
