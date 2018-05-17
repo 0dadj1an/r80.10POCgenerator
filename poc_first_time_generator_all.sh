@@ -425,7 +425,7 @@ main_check(){
         if [[ -f "$DONELOCK" ]];
                 then
         printf "first time wizard and settings done, not needed to run\n" >>$LOG 
-                exit 1
+                exit 0
         fi
 
        
