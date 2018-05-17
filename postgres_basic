@@ -20,15 +20,19 @@ mgmt_cli -r true show simple-gateway name checkpointPOC | grep "uid" | head -1  
 mgmt_cli -r true show threat-profile name POC | grep "uid" | head -1  | awk -F':' '{ gsub(" ", "", $0 ); print $2 }'
 
 Configure settings from cli for POC
+
+Monitor blade + settings
 mgmt_cli -r true set generic-object uid "75fa1576-5f11-5e4d-b41b-7d68f34e34dc" enableRtmTrafficReport true
 mgmt_cli -r true set generic-object uid "75fa1576-5f11-5e4d-b41b-7d68f34e34dc" enableRtmTrafficReportPerConnection true
 mgmt_cli -r true set generic-object uid "75fa1576-5f11-5e4d-b41b-7d68f34e34dc" enableRtmCountersReport true
+
+Indexing + SmartEvent 
 mgmt_cli -r true set generic-object uid $a logIndexer true
 mgmt_cli -r true set generic-object uid $a realTimeMonitor true
 
 mgmt_cli -r true set generic-object uid "75fa1576-5f11-5e4d-b41b-7d68f34e34dc" eventAnalyzer false
 mgmt_cli -r true set generic-object uid $a smarteventIntro true
-mgmt_cli -r true set generic-object uid $a abacusServer true 
+mgmt_cli -r true set generic-object uid $a abacusServer true  -->SmartEvent
 
 
 ###################
@@ -39,9 +43,11 @@ looking for smart event data in db to be able to enable it..
 [Expert@checkpointPOC:0]# mgmt_cli -r true show generic-object uid "954d31d8-fc7f-0c4a-95e7-2d8673dabb5a" | grep event
 smarteventIntroType: null
 dataLossPreventionBlade: "NOT_MINUS_INSTALLED"
-eventAnalyzer: false
+eventAnalyzer: false       -->> Correlation UNIT
 smarteventIntro: false
 dataLossPreventionBladeSettings: null
+
+
 [Expert@checkpointPOC:0]# mgmt_cli -r true show generic-object uid "954d31d8-fc7f-0c4a-95e7-2d8673dabb5a" | grep smart
 smartCenterBackup: false
 smarteventIntroType: null
@@ -58,6 +64,8 @@ psql_client cpm postgres -c "select objid dlesession,name from dleobjectderef_da
 check status:
 
 mgmt_cli -r true show generic-object uid "a0cf23fb-ab81-f34f-9082-cf734dae028c" | grep inspectIncomingFilesInterfaces
+
+set status:
 
 mgmt_cli -r true set generic-object uid "a0cf23fb-ab81-f34f-9082-cf734dae028c" teSettings.inspectIncomingFilesInterfaces "ALL"
 mgmt_cli -r true set generic-object uid "90ff996b-c018-4c73-a9ea-72d3f83c3369" avSettings.inspectIncomingFilesInterfaces "ALL"
