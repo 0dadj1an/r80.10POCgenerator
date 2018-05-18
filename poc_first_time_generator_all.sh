@@ -372,6 +372,7 @@ sed  '/SMC/!d' tmp.txt > tmp2.txt
 ObjectName=\`sed '/SMC/!d' tmp.txt | awk -F'[|]' '{print \$(1)}'\`
 mgmt_cli -r true set generic-object uid \$ObjectName gwFailure false; if [[ "$?" -eq 1 ]]; then printf "APP fail mode failure.. check huge log first_timelog_huge.log..\n" >>$LOG; else printf "App fail mode OK \n" >>$LOG;fi
 mgmt_cli -r true set generic-object uid \$ObjectName urlfSslCnEnabled true; if [[ "$?" -eq 1 ]]; then printf "APP SSL categorization mode failure.. check huge log first_timelog_huge.log..\n" >>$LOG; else printf "APP SSL categorization mode OK \n" >>$LOG;fi
+rm -r tmp.txt && rm -r tmp2.txt 
 EOF
 
 }
