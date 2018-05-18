@@ -38,7 +38,9 @@ done_lock.lock - done lock notifying that first time and settings were finished 
 
 reboot_lock.lock - reboot lock notifying that first time was finished successfully
 
-first_timelog.log - main log file
+first_timelog.log - main log file with status progress
+
+first_timelog_huge.log  -- detailed log for tshoot
 
 id.txt - session id for API
 
