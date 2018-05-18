@@ -73,11 +73,19 @@ echo "set interface $mgmt ipv4-address $ip mask-length $mask " >>$CMD
 echo "set static-route default nexthop gateway address $gw on" >>$CMD
 echo "set dns primary $DNS1">>$CMD
 echo "set dns secondary $DNS2">>$CMD
+<<<<<<< HEAD
 echo "set hostname checkpointPOC" >>$CMD
 echo "$mgmt" >$MGMTIF
 echo "$mask" >$MGMTMASK
 echo "$ip" >$MGMTIP
 echo "$monitor" >$MONITORIF
+=======
+echo "set hostname checkpointPOC">>$CMD
+echo "$mgmt">$MGMTIF
+echo "$mask">$MGMTMASK
+echo "$ip">$MGMTIP
+echo "$monitor">$MONITORIF
+>>>>>>> f7f653c7ba957b3f26ab992c6d787965662ecde1
 
 
 }
