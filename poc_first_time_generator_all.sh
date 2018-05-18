@@ -388,7 +388,6 @@ if [[ "$c" -eq 1 ]] || [[ "$b" -eq 1 ]] ;
 	printf "settings success!!!\n" >>$LOG 
 	printf "######################################\n" >>$LOG 
 	echo "donefile created after first_time wizard, do not delete manually\n" > $DONELOCK
-	#rm -r $REBOOTLOCK - not needed because lock fail is /etc/.wizard_accepted, not separate file
 	mgmt_cli logout -s /home/admin/id.txt >>$LOG 2>>$LOG
 	sleep 10
 	/sbin/shutdown -r now >>$LOG 2>>$LOG
