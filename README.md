@@ -1,4 +1,4 @@
-r80.10POCgenerator
+
 
 scripts related to POC:
 
@@ -6,9 +6,17 @@ poc_first_time_generator_all.sh
 
 reboot.sh
 
-These scripts can help you to configure Check Point R80.10 all in one POC server
 
-It has been tested on Gaia OS only.
+###################
+
+These scripts can help you to configure Check Point R80.10 all in one POC server (FW+MGMT on single machine)
+
+It has been tested on Gaia OS only and script supposes you have server with at least two interfaces - eth0 for mgmt and eth1 for SPAN port
+
+If you want to have more interfaces, finish scripts and add aditional interfaces in common way
+
+
+##################
 
 1. Copy both scripts to gateway and chmod +x on them
 
@@ -17,6 +25,10 @@ It has been tested on Gaia OS only.
 3. in second ssh session run ./poc_first_time_generator_all.sh and follw instruction
 
 script will finish first time wizard and set settings - blade activation (FW/AV/ABOT/APP/TE/IPS) + Smart Event and Correlation Unit + IPS update + new POC TP profile with settings according to POC guide
+
+
+################
+
 
 scripts will generate following log and lock files:
 
