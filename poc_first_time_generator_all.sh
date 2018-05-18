@@ -18,6 +18,7 @@ SCRIPTFOLDER="$( cd "$(dirname "$0")" ; pwd -P )"
 REBOOTLOCK="/etc/.wizard_accepted"
 DONELOCK="$SCRIPTFOLDER/done_lock.lock"
 LOG="$SCRIPTFOLDER/first_timelog.log"
+HUGELOG="$SCRIPTFOLDER/first_timelog_huge.log"
 SCRIPTFULLPATH="$SCRIPTFOLDER/poc_first_time_generator_all.sh"
 DNS1="8.8.8.8"
 DNS2="8.8.4.4"
@@ -247,15 +248,11 @@ check_api(){
 
 
 
-
-
 # method for first time wizard settings
 
 run_wizard(){
 
 sleep 5
-
-
 printf "Starting first time wizard..\n">>$LOG 
 
 	
@@ -272,52 +269,70 @@ echo "fw_tap_enable=1" >> $FWDIR/modules/fwkern.conf
 #run basic first time wizard
 /bin/config_system -s 'install_security_managment=true&install_mgmt_primary=true&install_mgmt_secondary=false&install_security_gw=true&mgmt_gui_clients_radio=any&mgmt_admin_name=admin&mgmt_admin_passwd=checkpoint123&hostname=checkpointPOC&ntp_primary=europe.pool.ntp.org&primary=8.8.8.8&download_info=true&timezone=Europe/Vienna'
 printf "first time wizard done - reboot system if you do not have ./reboot.sh script running ..\n">>$LOG 
+
 }
 
 
 
-# method for fw configuration
+
+# set blades and layer settings
+set_gateway(){
+
+printf "setting gateway and blades...\n" >>$LOG && printf "setting gateway and blades...\n" >>$HUGELOG
+mgmt_cli set simple-gateway name "checkpointPOC" firewall true application-control true url-filtering true ips true anti-bot true anti-virus true threat-emulation true content-awareness true --format json ignore-warnings true -s /home/admin/id.txt >>$HUGELOG; if [[ "$?" -eq 1 ]]; then printf "setting gateway issue.. check huge log first_timelog_huge.log..\n" >>$LOG ; else printf "setting gateway OK \n" >>$LOG;fi
+mgmt_cli set access-layer name "Network" applications-and-url-filtering true data-awareness true detect-using-x-forward-for true --format json ignore-warnings true -s /home/admin/id.txt >>$HUGELOG; if [[ "$?" -eq 1 ]]; then printf "setting layer issue.. check huge log first_timelog_huge.log..\n" >>$LOG; else printf "setting layer OK \n" >>$LOG;fi
+
+}
+
+# set rules 
+set_rules() {
+printf "setting rules...\n" >>$LOG && printf "setting rules...\n" >>$HUGELOG  
+mgmt_cli add access-rule layer "Network" position 1 name "Rule 1" action "Accept" track-settings.type "Extended Log" track-settings.accounting "True" track-settings.per-connection "True" track-settings.per-session "True"  --format json ignore-warnings true -s /home/admin/id.txt >>$HUGELOG;  if [[ "$?" -eq 1 ]]; then printf "rules issue.. check huge log first_timelog_huge.log..\n" >>$LOG; else printf "setting rules OK \n" >>$LOG;fi
+mgmt_cli set access-rule name "Cleanup rule" layer "Network" enabled "False"  --format json ignore-warnings true -s /home/admin/id.txt >>$HUGELOG; if [[ "$?" -eq 1 ]]; then printf "rules issue.. check huge log first_timelog_huge.log..\n" >>$LOG; else printf "setting rules OK \n" >>$LOG;fi
+
+}
+
+set_tp(){
+
+printf "TP policy and rules..\n" >>$LOG && printf "setting rules...\n" >>$HUGELOG  
+mgmt_cli add threat-profile name "POC" active-protections-performance-impact "High" active-protections-severity "Low or above" confidence-level-high "Detect" confidence-level-low "Detect" confidence-level-medium "Detect" threat-emulation true anti-virus true anti-bot true ips true ips-settings.newly-updated-protections "active" --format json ignore-warnings true -s /home/admin/id.txt >>$HUGELOG;  if [[ "$?" -eq 1 ]]; then printf "POC profile issue.. check huge log first_timelog_huge.log..\n" >>$LOG; else printf "POC profile OK \n" >>$LOG;fi
+mgmt_cli set threat-rule rule-number 1 layer "Standard Threat Prevention" comments "commnet for the first rule" protected-scope "Any" action "POC" install-on "Policy Targets" --format json -s /home/admin/id.txt >>$HUGELOG;  if [[ "$?" -eq 1 ]]; then printf "POC profile rule issue.. check huge log first_timelog_huge.log..\n" >>$LOG; else printf "POC profile rule OK \n" >>$LOG;fi
+printf "Get UID of POC TP profile and adding aditional settings..\n" >>$LOG && printf "Get UID of POC TP profile and adding aditional settings..\n" >>$HUGELOG
+d=$(mgmt_cli -r true show threat-profile name POC | grep "uid" | head -1  | awk -F':' '{ gsub(" ", "", $0 ); print $2 }') >>$HUGELOG; if [[ "$?" -eq 1 ]]; then printf "POC profile UID issue.. check huge log first_timelog_huge.log..\n" >>$LOG; else printf "POC profile UID OK \n" >>$LOG;fi
+
+mgmt_cli -r true set generic-object uid $d teSettings.inspectIncomingFilesInterfaces "ALL"; if [[ "$?" -eq 1 ]]; then printf "TE isnpect interfaces issue.. check huge log first_timelog_huge.log..\n" >>$LOG; else printf "TE isnpect interfaces OK \n" >>$LOG;fi
+mgmt_cli -r true set generic-object uid $d avSettings.inspectIncomingFilesInterfaces "ALL"; 
+mgmt_cli -r true set generic-object uid $d teSettings.fileTypeProcess "ALL_SUPPORTED"; 
+mgmt_cli -r true set generic-object uid $d avSettings.fileTypeProcess "ALL_FILE_TYPES"; 
+
+}
+
+
+
+ips_update(){
+printf "IPS update..\n" >>$LOG && printf "IPS update..\n" >>$HUGELOG
+mgmt_cli run-ips-update -s /home/admin/id.txt >>$HUGELOG; if [[ "$?" -eq 1 ]]; then printf "IPS update issue.. check huge log first_timelog_huge.log..\n" >>$LOG; else printf "IPS update OK \n" >>$LOG;fi
+
+
+}
+
+
+
+# method for fw configuration, calling separate methods..
 set_settings(){
 
 
 printf "Starting configuration of blades..\n">>$LOG 
-
-#wait till API server will start	
-check_api	
-
-
-
-printf "configuring simple gateway blades, Layer and adding Allow rule + log..\n" >>$LOG
-mgmt_cli set simple-gateway name "checkpointPOC" firewall true application-control true url-filtering true ips true anti-bot true anti-virus true threat-emulation true content-awareness true --format json ignore-warnings true -s /home/admin/id.txt 2>>$LOG
-# dodelej Layer Network a aktivuj app/ atd
-mgmt_cli set access-layer name "Network" applications-and-url-filtering true data-awareness true detect-using-x-forward-for true --format json ignore-warnings true -s /home/admin/id.txt 2>>$LOG
-
-printf "Publish..\n" >>$LOG
-mgmt_cli publish -s /home/admin/id.txt 2>>$LOG
+check_api	#wait till API server will start	
+set_gateway #configure gateway and layer
+printf "Publish..\n" >>$LOG && printf "Publish..\n" >>$HUGELOG # publish changes to continue
+mgmt_cli publish  -s /home/admin/id.txt 2>>$LOG
 c=$?
-
-mgmt_cli add access-rule layer "Network" position 1 name "Rule 1" action "Accept" track-settings.type "Extended Log" track-settings.accounting "True" track-settings.per-connection "True" track-settings.per-session "True"  --format json ignore-warnings true -s /home/admin/id.txt 2>>$LOG
-
-mgmt_cli set access-rule name "Cleanup rule" layer "Network" enabled "False"  --format json ignore-warnings true -s /home/admin/id.txt 2>>$LOG
-
-
-printf "IPS update..\n" >>$LOG
-mgmt_cli run-ips-update -s /home/admin/id.txt 2>>$LOG
-#sleep 10
-
-
-# not needed, already done for Optimized profile in method checkpoint_default_modify()
-printf "TP policy and rules..\n" >>$LOG
-mgmt_cli add threat-profile name "POC" active-protections-performance-impact "High" active-protections-severity "Low or above" confidence-level-high "Detect" confidence-level-low "Detect" confidence-level-medium "Detect" threat-emulation true anti-virus true anti-bot true ips true ips-settings.newly-updated-protections "active" --format json ignore-warnings true -s /home/admin/id.txt 2>>$LOG
-mgmt_cli set threat-rule rule-number 1 layer "Standard Threat Prevention" comments "commnet for the first rule" protected-scope "Any" action "POC" install-on "Policy Targets" --format json -s /home/admin/id.txt 2>>$LOG
-
+set_rules # set rules
+set_tp # set TP settings
 
 printf "Aditional blade settings..\n" >>$LOG
-# aditional settings
-# get CP object UID in a variable
-
 a=$(mgmt_cli -r true show simple-gateway name checkpointPOC | grep "uid" | head -1  | awk -F':' '{ gsub(" ", "", $0 ); print $2 }') 
-
 # other possible way ho to do that
 #mgmt_cli set generic-object uid $(mgmt_cli -r true show simple-gateway name checkpointPOC | grep "uid" | head -1  | awk -F':' '{ gsub(" ", "", $0 ); print $2 }') enableRtmTrafficReportPerConnection true --format json ignore-warnings true -s /home/admin/id.txt >>$LOG 2>>$LOG
 
@@ -339,11 +354,6 @@ mgmt_cli set generic-object uid $a eventAnalyzer true --format json ignore-warni
 mgmt_cli set generic-object uid $a abacusServer true --format json ignore-warnings true -s /home/admin/id.txt  2>>$LOG
 
 
-#rest unused, just for testing
-#mgmt_cli -r true set generic-object uid $a smarteventIntro true >>$LOG 2>>$LOG
-#mgmt_cli -r true set generic-object uid $a ipsEventCorrelator true >>$LOG 2>>$LOG
-#mgmt_cli -r true set generic-object uid $a ipsEventManager true >>$LOG 2>>$LOG
-
 
 
 printf "Topology definition..\n" >>$LOG
@@ -357,22 +367,15 @@ mgmt_cli publish -s /home/admin/id.txt  2>>$LOG
 b=$?
 #sleep 10
 
-# aditional TP settings before policy install
-printf "Get UID of POC TP profile and adding aditional settings..\n" >>$LOG
-d=$(mgmt_cli -r true show threat-profile name POC | grep "uid" | head -1  | awk -F':' '{ gsub(" ", "", $0 ); print $2 }') 2>>$LOG
-
-mgmt_cli -r true set generic-object uid $d teSettings.inspectIncomingFilesInterfaces "ALL"
-mgmt_cli -r true set generic-object uid $d avSettings.inspectIncomingFilesInterfaces "ALL" 
-mgmt_cli -r true set generic-object uid $d teSettings.fileTypeProcess "ALL_SUPPORTED" 
-mgmt_cli -r true set generic-object uid $d avSettings.fileTypeProcess "ALL_FILE_TYPES" 
-
-### je potreba dodelait fail mode na APP and URL + TE + DNS trap!!!!!!!!!! + publish
 
 printf "Policy install..\n" >>$LOG
 mgmt_cli install-policy policy-package "Standard" access true threat-prevention false targets.1 "checkpointPOC" --format json -s /home/admin/id.txt  2>>$LOG
 #sleep 10
 mgmt_cli install-policy policy-package "Standard" access false threat-prevention true targets.1 "checkpointPOC" --format json -s /home/admin/id.txt  2>>$LOG
 #sleep 10
+
+# with logging??
+# mgmt_cli -r true show threat-profile name Optimized | grep "uid" | head -1  | awk -F':' '{ gsub(" ", "", $0 ); print $2 }' > /dev/nul; if [[ "$?" -eq 1 ]]; then printf "finding UID crashed\n"; else printf "UID OK \n";fi
 
 
 
@@ -388,6 +391,7 @@ if [[ "$c" -eq 1 ]] || [[ "$b" -eq 1 ]] ;
 	printf "settings success!!!\n" >>$LOG 
 	printf "######################################\n" >>$LOG 
 	echo "donefile created after first_time wizard, do not delete manually\n" > $DONELOCK
+	rm -r $REBOOTLOCK
 	mgmt_cli logout -s /home/admin/id.txt >>$LOG 2>>$LOG
 	sleep 10
 	/sbin/shutdown -r now >>$LOG 2>>$LOG
@@ -414,8 +418,8 @@ main_check(){
                 run_wizard
         fi
 
-        #existuje REBOOTLOCK a zaroven neexistuje DONE lock
-        if [[ -f "$REBOOTLOCK" ]] && [[ ! -f "$DONELOCK" ]] ;
+        #existuje REBOOTLOCK a zaroven neexistuje FIRSTTIME
+        if [[ -f "$REBOOTLOCK" ]] ;
                 then
                 set_settings
         fi
@@ -424,7 +428,7 @@ main_check(){
         if [[ -f "$DONELOCK" ]];
                 then
         printf "first time wizard and settings done, not needed to run\n" >>$LOG 
-                exit 0
+                exit 1
         fi
 
        
