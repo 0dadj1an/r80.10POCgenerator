@@ -247,6 +247,7 @@ check_api(){
 
 
 
+
 # method for first time wizard settings
 run_wizard(){
 
@@ -273,6 +274,7 @@ echo "first time wizard done - reboot system if you do not have ./reboot.sh scri
 
 
 
+
 # set blades and layer settings
 set_gateway(){
 
@@ -281,6 +283,8 @@ mgmt_cli set simple-gateway name "checkpointPOC" firewall true application-contr
 mgmt_cli set access-layer name "Network" applications-and-url-filtering true data-awareness true detect-using-x-forward-for true --format json ignore-warnings true -s /home/admin/id.txt >>$HUGELOG; if [[ "$?" -eq 1 ]]; then printf "setting layer issue.. check huge log first_timelog_huge.log..\n" >>$LOG; else printf "setting layer OK \n" >>$LOG;fi
 
 }
+
+
 
 # set rules 
 set_rules() {
@@ -291,6 +295,8 @@ mgmt_cli set access-rule name "Cleanup rule" layer "Network" enabled "False"  --
 
 }
 
+
+
 #set TP settings
 set_tp_profile(){
 
@@ -300,6 +306,8 @@ mgmt_cli set threat-rule rule-number 1 layer "Standard Threat Prevention" commen
 
 
 }
+
+
 
 set_tp_settings(){
 
@@ -313,12 +321,16 @@ mgmt_cli -r true set generic-object uid $d avSettings.fileTypeProcess "ALL_FILE_
 }
 
 
+
+
 # run IPS update
 ips_update(){
 printf "IPS update..\n" >>$LOG && printf "IPS update..\n" >>$HUGELOG
 mgmt_cli run-ips-update -s /home/admin/id.txt >>$HUGELOG; if [[ "$?" -eq 1 ]]; then printf "IPS update issue.. check huge log first_timelog_huge.log..\n" >>$LOG; else printf "IPS update OK \n" >>$LOG;fi
 
 }
+
+
 
 
 #set monitoring and indexing
@@ -344,6 +356,8 @@ mgmt_cli set generic-object uid $a abacusServer true --format json ignore-warnin
 
 }
 
+
+
 # set topology definition
 topology_def(){
 
@@ -353,6 +367,9 @@ mgmt_cli set simple-gateway name "checkpointPOC" interfaces.1.name $(cat $MGMTIF
 
 }
 
+
+
+
 # policy install
 policy_install(){
 
@@ -361,6 +378,10 @@ mgmt_cli install-policy policy-package "Standard" access true threat-prevention 
 mgmt_cli install-policy policy-package "Standard" access false threat-prevention true targets.1 "checkpointPOC" --format json -s /home/admin/id.txt  >>$HUGELOG; if [[ "$?" -eq 1 ]]; then printf "Threat policy install failure.. check huge log first_timelog_huge.log..\n" >>$LOG; else printf "Threat Policy OK \n" >>$LOG;fi
 
 }
+
+
+
+
 # app fail mode
 app_failmode(){
   
@@ -376,6 +397,7 @@ rm -r tmp.txt && rm -r tmp2.txt
 EOF
 
 }
+
 
 
 
@@ -431,6 +453,8 @@ if [[ "$c" -eq 1 ]] || [[ "$b" -eq 1 ]] || [[ "$f" -eq 1 ]] ;
 fi
 
 }
+
+
 
 
 
