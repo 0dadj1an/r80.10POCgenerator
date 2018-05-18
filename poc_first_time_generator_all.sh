@@ -229,7 +229,7 @@ check_api(){
 	if [[ "$a" -eq 1 ]];
        then
 	       printf "API not loaded...\n">>$LOG
-		   if [[ "$a" -eq 15 ]];
+		   if [[ "$count" -eq 15 ]];
                then
 			   count=0
 			   api restart >>$LOG
