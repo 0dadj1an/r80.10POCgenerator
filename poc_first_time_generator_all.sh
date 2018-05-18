@@ -74,10 +74,10 @@ echo "set static-route default nexthop gateway address $gw on" >>$CMD
 echo "set dns primary $DNS1">>$CMD
 echo "set dns secondary $DNS2">>$CMD
 echo "set hostname checkpointPOC" >>$CMD
-echo "$mgmt" >$MGMTIF
-echo "$mask" >$MGMTMASK
-echo "$ip" >$MGMTIP
-echo "$monitor" >$MONITORIF
+echo "$mgmt">$MGMTIF
+echo "$mask">$MGMTMASK
+echo "$ip">$MGMTIP
+echo "$monitor">$MONITORIF
 
 
 }
