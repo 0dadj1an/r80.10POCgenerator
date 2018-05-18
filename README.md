@@ -32,13 +32,11 @@ script will finish first time wizard and set settings - blade activation (FW/AV/
 
 scripts will generate following log and lock files:
 
+first_timelog.log - MAIN LOG FILE!
+
 cmd.txt - tenplate for OS config
 
 done_lock.lock - done lock notifying that first time and settings were finished successfully
-
-reboot_lock.lock - reboot lock notifying that first time was finished successfully
-
-first_timelog.log - main log file with status progress
 
 first_timelog_huge.log  -- detailed log for tshoot
 
