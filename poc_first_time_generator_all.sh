@@ -415,8 +415,8 @@ main_check(){
                 run_wizard
         fi
 
-        #existuje REBOOTLOCK a zaroven neexistuje FIRSTTIME
-        if [[ -f "$REBOOTLOCK" ]] ;
+        #existuje REBOOTLOCK a zaroven neexistuje DONE lock
+        if [[ -f "$REBOOTLOCK" ]] && [[ ! -f "$DONELOCK" ]] ;
                 then
                 set_settings
         fi
