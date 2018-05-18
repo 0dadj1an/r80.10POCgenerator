@@ -8,7 +8,12 @@ reboot.sh
 
 These scripts can help you to configure Check Point R80.10 all in one POC server
 
-It has been tested on Gaia OS only.
+It has been tested on Gaia OS only and script supposes you have server with at least two interfaces - eth0 for mgmt and eth1 for SPAN port
+
+If you want to have more interfaces, finish scripts and add aditional interfaces in common way
+
+
+
 
 1. Copy both scripts to gateway and chmod +x on them
 
