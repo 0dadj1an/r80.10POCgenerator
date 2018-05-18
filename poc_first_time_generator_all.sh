@@ -341,7 +341,6 @@ printf "Monitor blade settings..\n" >>$LOG && printf "Monitor blade settings..\n
 a=$(mgmt_cli -r true show simple-gateway name checkpointPOC | grep "uid" | head -1  | awk -F':' '{ gsub(" ", "", $0 ); print $2 }') 
 #mgmt_cli set generic-object uid $(mgmt_cli -r true show simple-gateway name checkpointPOC | grep "uid" | head -1  | awk -F':' '{ gsub(" ", "", $0 ); print $2 }') enableRtmTrafficReportPerConnection true --format json ignore-warnings true -s /home/admin/id.txt >>$LOG 2>>$LOG
 # monitoring blade
-printf "Monitoring blade settings..\n" >>$LOG
 #enable monitoring blade 
 mgmt_cli set generic-object uid $a realTimeMonitor true --format json ignore-warnings true -s /home/admin/id.txt  >>$HUGELOG; if [[ "$?" -eq 1 ]]; then printf "monitor blade issue.. check huge log first_timelog_huge.log..\n" >>$LOG; else printf "Monitor blade OK \n" >>$LOG;fi
 # enable parameters
