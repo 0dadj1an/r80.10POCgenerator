@@ -75,17 +75,23 @@ echo "set dns primary $DNS1">>$CMD
 echo "set dns secondary $DNS2">>$CMD
 <<<<<<< HEAD
 echo "set hostname checkpointPOC" >>$CMD
+<<<<<<< HEAD
 echo "$mgmt" >$MGMTIF
 echo "$mask" >$MGMTMASK
 echo "$ip" >$MGMTIP
 echo "$monitor" >$MONITORIF
 =======
 echo "set hostname checkpointPOC">>$CMD
+=======
+>>>>>>> dev
 echo "$mgmt">$MGMTIF
 echo "$mask">$MGMTMASK
 echo "$ip">$MGMTIP
 echo "$monitor">$MONITORIF
+<<<<<<< HEAD
 >>>>>>> f7f653c7ba957b3f26ab992c6d787965662ecde1
+=======
+>>>>>>> dev
 
 
 }
