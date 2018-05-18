@@ -267,7 +267,7 @@ echo "fw_tap_enable=1" >> $FWDIR/modules/fwkern.conf
 
 #run basic first time wizard
 /bin/config_system -s 'install_security_managment=true&install_mgmt_primary=true&install_mgmt_secondary=false&install_security_gw=true&mgmt_gui_clients_radio=any&mgmt_admin_name=admin&mgmt_admin_passwd=checkpoint123&hostname=checkpointPOC&ntp_primary=europe.pool.ntp.org&primary=8.8.8.8&download_info=true&timezone=Europe/Vienna'
-echo "first time wizard done - reboot system if you do not have ./reboot.sh script running ..\n">>$LOG 
+echo "first time wizard done - reboot system if you do not have reboot.sh script running ..\n">>$LOG 
 
 }
 
