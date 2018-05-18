@@ -62,18 +62,18 @@ check_logs(){
 set_config(){
 
 #set state of interfaces
-echo "set interface $mgmt state on" >$CMD
-echo "set interface $monitor state on" >$CMD
+echo "set interface $mgmt state on" >>$CMD
+echo "set interface $monitor state on" >>$CMD
 #echo "set interface eth2 state on" >>$CMD
 
 #config interfaces
-echo "set interface $monitor monitor-mode on" >$CMD
-echo "set interface $mgmt ipv4-address $ip mask-length $mask " >$CMD
+echo "set interface $monitor monitor-mode on" >>$CMD
+echo "set interface $mgmt ipv4-address $ip mask-length $mask " >>$CMD
 #echo "set interface eth2 ipv4-address 2.2.2.2 mask-length 24" >>$CMD
-echo "set static-route default nexthop gateway address $gw on" >$CMD
-echo "set dns primary $DNS1">$CMD
-echo "set dns secondary $DNS2">$CMD
-echo "set hostname checkpointPOC" >$CMD
+echo "set static-route default nexthop gateway address $gw on" >>$CMD
+echo "set dns primary $DNS1">>$CMD
+echo "set dns secondary $DNS2">>$CMD
+echo "set hostname checkpointPOC" >>$CMD
 echo "$mgmt" >$MGMTIF
 echo "$mask" >$MGMTMASK
 echo "$ip" >$MGMTIP
@@ -377,10 +377,6 @@ EOF
 
 }
 
-# tp fail mode - do it
-tp_failmode(){
-
-}
 
 
 
