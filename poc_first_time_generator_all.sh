@@ -78,11 +78,7 @@ echo "$mgmt" >$MGMTIF
 echo "$mask" >$MGMTMASK
 echo "$ip" >$MGMTIP
 echo "$monitor" >$MONITORIF
-echo "set hostname checkpointPOC">>$CMD
-echo "$mgmt">$MGMTIF
-echo "$mask">$MGMTMASK
-echo "$ip">$MGMTIP
-echo "$monitor">$MONITORIF
+
 
 
 
