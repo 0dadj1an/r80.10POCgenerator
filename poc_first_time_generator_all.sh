@@ -405,7 +405,7 @@ EOF
 # method for fw configuration, calling separate methods..
 set_settings(){
 
-printf "Starting configuration of blades..\n">>$LOG 
+printf "Starting configuration of blades..\n">>$LOG && printf "Starting configuration of blades..\n">>$HUGELOG
 check_api	#wait till API server will start	
 set_gateway #configure gateway and layer
 
