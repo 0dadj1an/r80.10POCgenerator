@@ -162,7 +162,7 @@ printf "enter load_parameter method, for more info see os.log..\n" >>$LOG
                 printf "load_parameters() is okay..\n" >> $LOGOS 
                 execute_config
                 else
-                 printf "Loading again..\n"
+                 printf "Loading again..\n" 
                  printf "again loading parameters from load_parameters() method because it was not confirmed..\n" >>$LOGOS
                  printf "removing CMD template from load_parameters()\n" >>$LOGOS
                  rm -r $CMD
