@@ -20,7 +20,7 @@ If you want to have more interfaces, finish scripts and add aditional interfaces
 
 1. Copy both scripts to gateway and chmod +x on them
 
-2. Script reboot.sh is help script to reboot server when first time wizard finish (config_system disconnect session and I dont wont to run it in nohup). Run it in sepparate ssh session in backgroud first --> ./reboot.sh &
+2. Script reboot.sh is help script to reboot server when first time wizard finish (config_system disconnect session even it shoud be fixed in sk118715 and I dont wont to run it in nohup). Run it in sepparate ssh session in backgroud first --> ./reboot.sh &
 
 3. in second ssh session run ./poc_first_time_generator_all.sh and follw instruction
 
