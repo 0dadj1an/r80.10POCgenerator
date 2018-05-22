@@ -26,6 +26,8 @@ If you want to have more interfaces, finish scripts and add aditional interfaces
 
 script will finish first time wizard and set settings - blade activation (FW/AV/ABOT/APP/TE/IPS) + Smart Event and Correlation Unit + IPS update + new POC TP profile with settings according to POC guide
 
+4. default GUI credential after first time wizard is username:admin passowrd:checkpoint123 
+
 
 ################
 
