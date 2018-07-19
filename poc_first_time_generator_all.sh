@@ -19,7 +19,7 @@ REBOOTLOCK="/etc/.wizard_accepted"
 DONELOCK="$SCRIPTFOLDER/done_lock.lock"
 LOG="$SCRIPTFOLDER/first_timelog.log"
 HUGELOG="$SCRIPTFOLDER/first_timelog_huge.log"
-SCRIPTFULLPATH="$SCRIPTFOLDER/poc_first_time_generator_all.sh &"
+SCRIPTFULLPATH="$SCRIPTFOLDER/poc_first_time_generator_all.sh"
 DNS1="8.8.8.8"
 DNS2="8.8.4.4"
 TIMESERVER="europe.pool.ntp.org"
@@ -205,7 +205,7 @@ if grep -Fxq "$SCRIPTFULLPATH" /etc/rc.local
 
    else
     # not found, add it..
-    echo $SCRIPTFULLPATH >> /etc/rc.local
+    echo "$SCRIPTFULLPATH &">> /etc/rc.local
     printf "See rc.local, script path added..\n" >> $LOG
     
     
