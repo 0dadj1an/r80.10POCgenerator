@@ -4,7 +4,7 @@
 #title      :first time generator for POC
 #descrition :This script runs first time wizard and configure blades and other
 #            settings
-#author     :ivo.hrbacek@ixperta.com a laura
+#author     :ivohrbacek@gmail.com a laura
 #version    :0.0001
 #==============================================================================
 # CP enviroment variables for cron see sk77300, sk90441
