@@ -5,10 +5,10 @@
 #descrition :This script runs first time wizard and configure blades and other
 #            settings
 #author     :ivohrbacek@gmail.com a laura
-#version    :0.0001
+#version    :0.0002 80.40
 #==============================================================================
 # CP enviroment variables for cron see sk77300, sk90441
-source /opt/CPshrd-R80/tmp/.CPprofile.sh
+source /opt/CPshrd-R80.40/tmp/.CPprofile.sh
 
 
 
@@ -268,7 +268,7 @@ echo "fw_tap_enable=1" >> $FWDIR/modules/fwkern.conf
 
 
 #run basic first time wizard
-/bin/config_system -s 'install_security_managment=true&install_mgmt_primary=true&install_mgmt_secondary=false&install_security_gw=true&mgmt_gui_clients_radio=any&mgmt_admin_name=admin&mgmt_admin_passwd=checkpoint123&hostname=checkpointPOC&ntp_primary=europe.pool.ntp.org&primary=8.8.8.8&download_info=true&timezone=Europe/Vienna'
+/bin/config_system -s 'install_security_managment=true&install_mgmt_primary=true&install_mgmt_secondary=false&install_security_gw=true&mgmt_gui_clients_radio=any&mgmt_admin_name=admin&mgmt_admin_passwd=checkpoint123&hostname=checkpointPOC&primary=8.8.8.8&download_info=true&timezone=Europe/Vienna'
 echo "first time wizard done - reboot system if you do not have reboot.sh script running ..\n">>$LOG 
 
 }
@@ -427,6 +427,11 @@ set_tp_settings #set TP settings to new POC profile
 set_monitoring_blade_and_indexing #set indexing
 topology_def # define topology
 app_failmode
+
+printf "Publish..\n" >>$LOG && printf "Publish..\n" >>$HUGELOG
+mgmt_cli publish -s /home/admin/id.txt  >>$HUGELOG 
+x=$?
+
 ips_update
 
 printf "Publish..\n" >>$LOG && printf "Publish..\n" >>$HUGELOG
@@ -435,7 +440,7 @@ b=$?
 
 
 #check status of publish..
-if [[ "$c" -eq 1 ]] || [[ "$b" -eq 1 ]] || [[ "$f" -eq 1 ]] ;
+if [[ "$c" -eq 1 ]] || [[ "$b" -eq 1 ]] || [[ "$f" -eq 1 ]] || [[ "$x" -eq 1 ]] ;
  then
 	printf "######################################\n"	 >>$LOG 
 	printf "firewall settings crashed for some reason, run it again\n"  >>$LOG 
