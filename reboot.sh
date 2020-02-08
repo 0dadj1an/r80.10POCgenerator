@@ -7,7 +7,7 @@
 #version    :0.0001
 #==============================================================================
 # CP enviroment variables for cron see sk77300, sk90441
-source /opt/CPshrd-R80/tmp/.CPprofile.sh
+source /opt/CPshrd-R80.40/tmp/.CPprofile.sh
 
 
 #variables
