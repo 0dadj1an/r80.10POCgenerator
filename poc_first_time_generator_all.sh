@@ -205,11 +205,8 @@ if grep -Fxq "$SCRIPTFULLPATH" /etc/rc.local
 
    else
     # not found, add it..
-<<<<<<< HEAD
     echo "$SCRIPTFULLPATH &" >> /etc/rc.local
-=======
-    echo "$SCRIPTFULLPATH &">> /etc/rc.local
->>>>>>> 80.40
+
     printf "See rc.local, script path added..\n" >> $LOG
     
     
