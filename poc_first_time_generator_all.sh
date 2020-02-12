@@ -5,11 +5,7 @@
 #descrition :This script runs first time wizard and configure blades and other
 #            settings
 #author     :ivohrbacek@gmail.com a laura
-<<<<<<< HEAD
-#version    :0.0001
-=======
 #version    :0.0002 80.40
->>>>>>> 80.40
 #==============================================================================
 # CP enviroment variables for cron see sk77300, sk90441
 source /opt/CPshrd-R80.40/tmp/.CPprofile.sh
